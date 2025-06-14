@@ -2,13 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Patient } from '../../domain/entities/patient.entity';
 import { PatientRepository } from '../../domain/repositories/patient.repository';
 import { PATIENT_REPOSITORY } from '../../domain/repositories/tokens';
-
-export interface CreatePatientDTO {
-  name: string;
-  email: string;
-  phone: string;
-  birthDate: Date;
-}
+import { CreatePatientDTO } from '../dtos/create-patient.dto';
 
 @Injectable()
 export class CreatePatientUseCase {
@@ -29,7 +23,7 @@ export class CreatePatientUseCase {
       data.name,
       data.email,
       data.phone,
-      data.birthDate,
+      new Date(data.birthDate),
     );
 
     // Salvar no repositório

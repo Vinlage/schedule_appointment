@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { CreatePatientUseCase, CreatePatientDTO } from '../../../application/use-cases/create-patient.use-case';
+import { CreatePatientUseCase } from '../../../application/use-cases/create-patient.use-case';
 import { ListPatientsUseCase } from '../../../application/use-cases/list-patients.use-case';
 import { GetPatientByIdUseCase } from '../../../application/use-cases/get-patient-by-id.use-case';
-import { UpdatePatientUseCase, UpdatePatientDTO } from '../../../application/use-cases/update-patient.use-case';
+import { UpdatePatientUseCase } from '../../../application/use-cases/update-patient.use-case';
 import { DeletePatientUseCase } from '../../../application/use-cases/delete-patient.use-case';
+import { CreatePatientDTO } from '../../../application/dtos/create-patient.dto';
+import { UpdatePatientDTO } from '../../../application/dtos/update-patient.dto';
 
 @Controller('patients')
 export class PatientController {

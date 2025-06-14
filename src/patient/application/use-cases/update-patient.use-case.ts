@@ -2,13 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Patient } from '../../domain/entities/patient.entity';
 import { PatientRepository } from '../../domain/repositories/patient.repository';
 import { PATIENT_REPOSITORY } from '../../domain/repositories/tokens';
-
-export interface UpdatePatientDTO {
-  name?: string;
-  email?: string;
-  phone?: string;
-  birthDate?: Date;
-}
+import { UpdatePatientDTO } from '../dtos/update-patient.dto';
 
 @Injectable()
 export class UpdatePatientUseCase {
@@ -37,7 +31,7 @@ export class UpdatePatientUseCase {
       data.name ?? patient.getName(),
       data.email ?? patient.getEmail(),
       data.phone ?? patient.getPhone(),
-      data.birthDate ?? patient.getBirthDate(),
+      data.birthDate ? new Date(data.birthDate) : patient.getBirthDate(),
       patient.getCreatedAt(),
       new Date(),
     );
