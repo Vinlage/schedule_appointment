@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Patient } from '../../domain/entities/patient.entity';
 import { PatientRepository } from '../../domain/repositories/patient.repository';
+import { PATIENT_REPOSITORY } from '../../domain/repositories/tokens';
 
 export interface CreatePatientDTO {
   name: string;
@@ -11,7 +12,10 @@ export interface CreatePatientDTO {
 
 @Injectable()
 export class CreatePatientUseCase {
-  constructor(private readonly patientRepository: PatientRepository) {}
+  constructor(
+    @Inject(PATIENT_REPOSITORY)
+    private readonly patientRepository: PatientRepository,
+  ) {}
 
   async execute(data: CreatePatientDTO): Promise<Patient> {
     // Verificar se já existe um paciente com o mesmo email

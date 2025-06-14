@@ -29,6 +29,26 @@ export class Patient {
     );
   }
 
+  static reconstruct(
+    id: string,
+    name: string,
+    email: string,
+    phone: string,
+    birthDate: Date,
+    createdAt: Date,
+    updatedAt: Date,
+  ): Patient {
+    return new Patient(
+      id,
+      name,
+      email,
+      phone,
+      birthDate,
+      createdAt,
+      updatedAt,
+    );
+  }
+
   // Getters
   getId(): string {
     return this.id;
