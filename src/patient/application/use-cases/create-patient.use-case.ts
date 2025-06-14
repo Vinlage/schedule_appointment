@@ -3,6 +3,7 @@ import { Patient } from '../../domain/entities/patient.entity';
 import { PatientRepository } from '../../domain/repositories/patient.repository';
 import { PATIENT_REPOSITORY } from '../../domain/repositories/tokens';
 import { CreatePatientDTO } from '../dtos/create-patient.dto';
+import { EmailAlreadyInUseError } from '../../domain/errors/patient-errors';
 
 @Injectable()
 export class CreatePatientUseCase {
@@ -15,7 +16,7 @@ export class CreatePatientUseCase {
     // Verificar se já existe um paciente com o mesmo email
     const existingPatient = await this.patientRepository.findByEmail(data.email);
     if (existingPatient) {
-      throw new Error('Patient with this email already exists');
+      throw new EmailAlreadyInUseError(data.email);
     }
 
     // Criar novo paciente

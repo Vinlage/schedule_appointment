@@ -1,6 +1,7 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { PatientRepository } from '../../domain/repositories/patient.repository';
 import { PATIENT_REPOSITORY } from '../../domain/repositories/tokens';
+import { PatientNotFoundError } from '../../domain/errors/patient-errors';
 
 @Injectable()
 export class DeletePatientUseCase {
@@ -12,7 +13,7 @@ export class DeletePatientUseCase {
   async execute(id: string): Promise<void> {
     const patient = await this.patientRepository.findById(id);
     if (!patient) {
-      throw new NotFoundException(`Patient with ID ${id} not found`);
+      throw new PatientNotFoundError(id);
     }
 
     await this.patientRepository.delete(id);
