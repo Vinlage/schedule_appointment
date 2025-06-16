@@ -46,6 +46,46 @@ export class TypeOrmDoctorRepository implements DoctorRepository {
     );
   }
 
+  async findByEmail(email: string): Promise<Doctor | null> {
+    const doctorEntity = await this.repository.findOne({
+      where: { email },
+    });
+
+    if (!doctorEntity) return null;
+
+    return Doctor.reconstruct(
+      doctorEntity.id,
+      doctorEntity.name,
+      doctorEntity.email,
+      doctorEntity.phone,
+      doctorEntity.specialty,
+      doctorEntity.crm,
+      doctorEntity.active,
+      doctorEntity.createdAt,
+      doctorEntity.updatedAt,
+    );
+  }
+
+  async findBySpecialty(specialty: string): Promise<Doctor[]> {
+    const doctorEntities = await this.repository.find({
+      where: { specialty },
+    });
+
+    return doctorEntities.map((entity) =>
+      Doctor.reconstruct(
+        entity.id,
+        entity.name,
+        entity.email,
+        entity.phone,
+        entity.specialty,
+        entity.crm,
+        entity.active,
+        entity.createdAt,
+        entity.updatedAt,
+      ),
+    );
+  }
+
   async findAll(): Promise<Doctor[]> {
     const doctorEntities = await this.repository.find();
     return doctorEntities.map((entity) =>
