@@ -22,7 +22,7 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
       appointmentDate: appointment.getDate(),
       status: appointment.getStatus(),
       reason: appointment.getReason(),
-      notes: appointment.getNotes(),
+      notes: appointment.getNotes() ?? undefined,
       createdAt: appointment.getCreatedAt(),
       updatedAt: appointment.getUpdatedAt(),
     });
@@ -139,7 +139,7 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
       appointmentDate: appointment.getDate(),
       status: appointment.getStatus(),
       reason: appointment.getReason(),
-      notes: appointment.getNotes(),
+      notes: appointment.getNotes() ?? undefined,
       updatedAt: appointment.getUpdatedAt(),
     });
 
