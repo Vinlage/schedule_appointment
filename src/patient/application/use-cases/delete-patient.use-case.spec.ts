@@ -29,7 +29,9 @@ describe('DeletePatientUseCase', () => {
   });
 
   it('should throw PatientNotFoundError when patient does not exist', async () => {
-    await expect(useCase.execute('non-existent-id')).rejects.toThrow(PatientNotFoundError);
+    await expect(useCase.execute('non-existent-id')).rejects.toThrow(
+      PatientNotFoundError,
+    );
   });
 
   it('should delete patient', async () => {
@@ -51,4 +53,4 @@ describe('DeletePatientUseCase', () => {
     const foundPatient = await repository.findById('1');
     expect(foundPatient).toBeNull();
   });
-}); 
+});

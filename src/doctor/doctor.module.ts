@@ -25,4 +25,4 @@ import { DOCTOR_REPOSITORY } from './domain/repositories/tokens';
     },
   ],
 })
-export class DoctorModule {} 
+export class DoctorModule {}

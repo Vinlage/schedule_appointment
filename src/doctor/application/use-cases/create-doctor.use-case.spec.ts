@@ -6,7 +6,6 @@ import { ConflictException } from '@nestjs/common';
 
 describe('CreateDoctorUseCase', () => {
   let useCase: CreateDoctorUseCase;
-  let repository: DoctorRepositoryMock;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,7 +19,6 @@ describe('CreateDoctorUseCase', () => {
     }).compile();
 
     useCase = module.get<CreateDoctorUseCase>(CreateDoctorUseCase);
-    repository = module.get<DoctorRepositoryMock>('DOCTOR_REPOSITORY');
   });
 
   it('should be defined', () => {
@@ -57,6 +55,8 @@ describe('CreateDoctorUseCase', () => {
 
     await useCase.execute(doctorData);
 
-    await expect(useCase.execute(doctorData)).rejects.toThrow(ConflictException);
+    await expect(useCase.execute(doctorData)).rejects.toThrow(
+      ConflictException,
+    );
   });
-}); 
+});

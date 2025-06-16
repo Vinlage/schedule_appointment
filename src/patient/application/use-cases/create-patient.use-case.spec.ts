@@ -60,6 +60,8 @@ describe('CreatePatientUseCase', () => {
 
     await useCase.execute(patientData);
 
-    await expect(useCase.execute(patientData)).rejects.toThrow(EmailAlreadyInUseError);
+    await expect(useCase.execute(patientData)).rejects.toThrow(
+      EmailAlreadyInUseError,
+    );
   });
-}); 
+});

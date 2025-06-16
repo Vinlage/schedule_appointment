@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
+import { IsEmail, IsString, IsBoolean, IsOptional } from 'class-validator';
 
 export class UpdateDoctorDto {
   @IsString()
@@ -24,4 +24,4 @@ export class UpdateDoctorDto {
   @IsBoolean()
   @IsOptional()
   active?: boolean;
-} 
+}

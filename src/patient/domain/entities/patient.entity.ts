@@ -18,15 +18,7 @@ export class Patient {
     birthDate: Date,
   ): Patient {
     const now = new Date();
-    return new Patient(
-      randomUUID(),
-      name,
-      email,
-      phone,
-      birthDate,
-      now,
-      now,
-    );
+    return new Patient(randomUUID(), name, email, phone, birthDate, now, now);
   }
 
   static reconstruct(
@@ -38,15 +30,7 @@ export class Patient {
     createdAt: Date,
     updatedAt: Date,
   ): Patient {
-    return new Patient(
-      id,
-      name,
-      email,
-      phone,
-      birthDate,
-      createdAt,
-      updatedAt,
-    );
+    return new Patient(id, name, email, phone, birthDate, createdAt, updatedAt);
   }
 
   // Getters
@@ -83,11 +67,14 @@ export class Patient {
     const today = new Date();
     const age = today.getFullYear() - this.birthDate.getFullYear();
     const monthDiff = today.getMonth() - this.birthDate.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < this.birthDate.getDate())) {
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < this.birthDate.getDate())
+    ) {
       return age - 1 >= 18;
     }
-    
+
     return age >= 18;
   }
-} 
+}

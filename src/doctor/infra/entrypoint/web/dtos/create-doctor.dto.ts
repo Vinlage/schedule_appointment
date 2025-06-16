@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsBoolean,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateDoctorDto {
   @IsString()
@@ -24,4 +30,4 @@ export class CreateDoctorDto {
   @IsBoolean()
   @IsOptional()
   active?: boolean = true;
-} 
+}

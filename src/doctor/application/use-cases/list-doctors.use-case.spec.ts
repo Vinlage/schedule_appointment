@@ -59,4 +59,4 @@ describe('ListDoctorsUseCase', () => {
     expect(doctors[0].getName()).toBe(doctor1.getName());
     expect(doctors[1].getName()).toBe(doctor2.getName());
   });
-}); 
+});

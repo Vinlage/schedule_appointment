@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { DoctorTypeOrmEntity } from '../../../../../doctor/infra/database/typeorm/entities/doctor.entity';
 import { PatientTypeOrmEntity } from '../../../../../patient/infra/database/typeorm/entities/patient.entity';
 import { AppointmentStatus } from '../../../../../appointment/domain/entities/appointment.entity';
@@ -37,4 +43,4 @@ export class AppointmentTypeOrmEntity {
 
   @Column({ name: 'updated_at' })
   updatedAt: Date;
-} 
+}

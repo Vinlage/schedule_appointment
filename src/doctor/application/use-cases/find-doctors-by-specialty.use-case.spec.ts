@@ -18,7 +18,9 @@ describe('FindDoctorsBySpecialtyUseCase', () => {
       ],
     }).compile();
 
-    useCase = module.get<FindDoctorsBySpecialtyUseCase>(FindDoctorsBySpecialtyUseCase);
+    useCase = module.get<FindDoctorsBySpecialtyUseCase>(
+      FindDoctorsBySpecialtyUseCase,
+    );
     repository = module.get<DoctorRepositoryMock>('DOCTOR_REPOSITORY');
   });
 
@@ -68,4 +70,4 @@ describe('FindDoctorsBySpecialtyUseCase', () => {
     const doctors = await useCase.execute('NonExistentSpecialty');
     expect(doctors).toEqual([]);
   });
-}); 
+});

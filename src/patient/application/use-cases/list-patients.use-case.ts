@@ -13,4 +13,4 @@ export class ListPatientsUseCase {
   async execute(): Promise<Patient[]> {
     return this.patientRepository.list();
   }
-} 
+}

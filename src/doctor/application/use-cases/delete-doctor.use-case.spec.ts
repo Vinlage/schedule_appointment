@@ -44,6 +44,8 @@ describe('DeleteDoctorUseCase', () => {
   });
 
   it('should throw NotFoundException when doctor is not found', async () => {
-    await expect(useCase.execute('non-existent-id')).rejects.toThrow(NotFoundException);
+    await expect(useCase.execute('non-existent-id')).rejects.toThrow(
+      NotFoundException,
+    );
   });
-}); 
+});

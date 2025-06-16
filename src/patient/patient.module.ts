@@ -25,4 +25,4 @@ import { PATIENT_REPOSITORY } from './domain/repositories/tokens';
     },
   ],
 })
-export class PatientModule {} 
+export class PatientModule {}

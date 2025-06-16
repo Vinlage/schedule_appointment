@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   ExceptionFilter,
   Catch,
@@ -8,22 +10,43 @@ import {
 import { Response } from 'express';
 import { DomainError } from '../errors/domain-error';
 
+interface ExceptionResponse {
+  message: string | string[];
+  error?: string;
+  statusCode: number;
+}
+
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
+    let status: number;
+    let message: string | string[];
+
     if (exception instanceof HttpException) {
-      const status = exception.getStatus();
+      status = exception.getStatus();
+      const exceptionResponse = exception.getResponse() as ExceptionResponse;
+      message = exceptionResponse.message || exception.message;
+    } else if (exception instanceof Error) {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+      message = exception.message;
+    } else {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+      message = 'Internal server error';
+    }
+
+    if (exception instanceof HttpException) {
       const exceptionResponse = exception.getResponse();
 
       return response.status(status).json({
         statusCode: status,
         timestamp: new Date().toISOString(),
-        message: typeof exceptionResponse === 'string' 
-          ? exceptionResponse 
-          : (exceptionResponse as any).message,
+        message:
+          typeof exceptionResponse === 'string'
+            ? exceptionResponse
+            : (exceptionResponse as any).message,
       });
     }
 
@@ -38,10 +61,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     // Erro não tratado
     console.error(exception);
-    return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+    return response.status(status).json({
+      statusCode: status,
+      message,
       timestamp: new Date().toISOString(),
-      message: 'Internal server error',
     });
   }
-} 
+}

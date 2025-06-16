@@ -9,4 +9,4 @@ export const databaseConfig: TypeOrmModuleOptions = {
   database: process.env.DB_DATABASE || 'schedule_appointment',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   synchronize: process.env.NODE_ENV !== 'production',
-}; 
+};

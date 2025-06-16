@@ -3,7 +3,10 @@ import { UpdatePatientUseCase } from './update-patient.use-case';
 import { PatientRepositoryMock } from '../../test/mocks/patient-repository.mock';
 import { PATIENT_REPOSITORY } from '../../domain/repositories/tokens';
 import { Patient } from '../../domain/entities/patient.entity';
-import { PatientNotFoundError, EmailAlreadyInUseError } from '../../domain/errors/patient-errors';
+import {
+  PatientNotFoundError,
+  EmailAlreadyInUseError,
+} from '../../domain/errors/patient-errors';
 import { UpdatePatientDTO } from '../dtos/update-patient.dto';
 
 describe('UpdatePatientUseCase', () => {
@@ -35,7 +38,9 @@ describe('UpdatePatientUseCase', () => {
       phone: '9876543210',
     };
 
-    await expect(useCase.execute('non-existent-id', updateData)).rejects.toThrow(PatientNotFoundError);
+    await expect(
+      useCase.execute('non-existent-id', updateData),
+    ).rejects.toThrow(PatientNotFoundError);
   });
 
   it('should update patient', async () => {
@@ -100,6 +105,8 @@ describe('UpdatePatientUseCase', () => {
       email: 'jane@example.com',
     };
 
-    await expect(useCase.execute('1', updateData)).rejects.toThrow(EmailAlreadyInUseError);
+    await expect(useCase.execute('1', updateData)).rejects.toThrow(
+      EmailAlreadyInUseError,
+    );
   });
-}); 
+});

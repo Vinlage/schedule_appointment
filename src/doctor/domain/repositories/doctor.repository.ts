@@ -8,4 +8,4 @@ export interface DoctorRepository {
   update(doctor: Doctor): Promise<Doctor>;
   delete(id: string): Promise<void>;
   findAll(): Promise<Doctor[]>;
-} 
+}

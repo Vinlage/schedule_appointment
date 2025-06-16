@@ -1,4 +1,11 @@
-import { IsString, IsEmail, IsDateString, MinLength, Matches, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsDateString,
+  MinLength,
+  Matches,
+  IsOptional,
+} from 'class-validator';
 
 export class UpdatePatientDTO {
   @IsOptional()
@@ -20,4 +27,4 @@ export class UpdatePatientDTO {
   @IsOptional()
   @IsDateString()
   birthDate?: Date;
-} 
+}

@@ -1,4 +1,9 @@
-import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Appointment } from '../../domain/entities/appointment.entity';
 import { AppointmentRepository } from '../../domain/repositories/appointment.repository';
 import { APPOINTMENT_REPOSITORY } from '../../domain/repositories/tokens';
@@ -17,10 +22,12 @@ export class CompleteAppointmentUseCase {
     }
 
     if (!appointment.isConfirmed()) {
-      throw new BadRequestException('Only confirmed appointments can be completed');
+      throw new BadRequestException(
+        'Only confirmed appointments can be completed',
+      );
     }
 
     const completedAppointment = appointment.complete();
     return this.appointmentRepository.update(completedAppointment);
   }
-} 
+}

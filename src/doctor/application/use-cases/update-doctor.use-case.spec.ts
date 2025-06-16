@@ -60,6 +60,8 @@ describe('UpdateDoctorUseCase', () => {
       name: 'Dr. John Smith',
     };
 
-    await expect(useCase.execute('non-existent-id', updateData)).rejects.toThrow(NotFoundException);
+    await expect(
+      useCase.execute('non-existent-id', updateData),
+    ).rejects.toThrow(NotFoundException);
   });
-}); 
+});

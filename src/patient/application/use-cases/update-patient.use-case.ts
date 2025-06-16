@@ -3,7 +3,10 @@ import { Patient } from '../../domain/entities/patient.entity';
 import { PatientRepository } from '../../domain/repositories/patient.repository';
 import { PATIENT_REPOSITORY } from '../../domain/repositories/tokens';
 import { UpdatePatientDTO } from '../dtos/update-patient.dto';
-import { PatientNotFoundError, EmailAlreadyInUseError } from '../../domain/errors/patient-errors';
+import {
+  PatientNotFoundError,
+  EmailAlreadyInUseError,
+} from '../../domain/errors/patient-errors';
 
 @Injectable()
 export class UpdatePatientUseCase {
@@ -20,7 +23,9 @@ export class UpdatePatientUseCase {
 
     // Se o email está sendo atualizado, verificar se já existe
     if (data.email && data.email !== patient.getEmail()) {
-      const existingPatient = await this.patientRepository.findByEmail(data.email);
+      const existingPatient = await this.patientRepository.findByEmail(
+        data.email,
+      );
       if (existingPatient) {
         throw new EmailAlreadyInUseError(data.email);
       }
@@ -40,4 +45,4 @@ export class UpdatePatientUseCase {
     await this.patientRepository.update(updatedPatient);
     return updatedPatient;
   }
-} 
+}

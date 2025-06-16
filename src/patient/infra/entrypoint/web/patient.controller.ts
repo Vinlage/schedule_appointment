@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CreatePatientUseCase } from '../../../application/use-cases/create-patient.use-case';
 import { ListPatientsUseCase } from '../../../application/use-cases/list-patients.use-case';
 import { GetPatientByIdUseCase } from '../../../application/use-cases/get-patient-by-id.use-case';
@@ -33,7 +41,7 @@ export class PatientController {
   @Get()
   async list() {
     const patients = await this.listPatientsUseCase.execute();
-    return patients.map(patient => ({
+    return patients.map((patient) => ({
       id: patient.getId(),
       name: patient.getName(),
       email: patient.getEmail(),
@@ -74,4 +82,4 @@ export class PatientController {
     await this.deletePatientUseCase.execute(id);
     return { message: 'Patient deleted successfully' };
   }
-} 
+}

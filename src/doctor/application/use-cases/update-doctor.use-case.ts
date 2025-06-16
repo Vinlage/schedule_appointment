@@ -28,4 +28,4 @@ export class UpdateDoctorUseCase {
 
     return this.doctorRepository.update(updatedDoctor);
   }
-} 
+}

@@ -88,4 +88,4 @@ export class TypeOrmPatientRepository implements PatientRepository {
       ),
     );
   }
-} 
+}

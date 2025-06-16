@@ -77,10 +77,10 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
     startDate?: Date,
     endDate?: Date,
   ): Promise<Appointment[]> {
-    const where: any = { doctor: { id: doctor.getId() } };
+    const where: Record<string, unknown> = { doctor: { id: doctor.getId() } };
 
     if (startDate && endDate) {
-      where.appointmentDate = Between(startDate, endDate);
+      where['appointmentDate'] = Between(startDate, endDate);
     }
 
     const appointmentEntities = await this.repository.find({
@@ -108,10 +108,10 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
     startDate?: Date,
     endDate?: Date,
   ): Promise<Appointment[]> {
-    const where: any = { patient: { id: patient.getId() } };
+    const where: Record<string, unknown> = { patient: { id: patient.getId() } };
 
     if (startDate && endDate) {
-      where.appointmentDate = Between(startDate, endDate);
+      where['appointmentDate'] = Between(startDate, endDate);
     }
 
     const appointmentEntities = await this.repository.find({
@@ -149,4 +149,4 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
   async delete(id: string): Promise<void> {
     await this.repository.delete(id);
   }
-} 
+}

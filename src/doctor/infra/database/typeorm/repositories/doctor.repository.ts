@@ -120,4 +120,4 @@ export class TypeOrmDoctorRepository implements DoctorRepository {
   async delete(id: string): Promise<void> {
     await this.repository.delete(id);
   }
-} 
+}

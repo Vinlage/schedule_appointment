@@ -145,4 +145,4 @@ export class Doctor {
       new Date(),
     );
   }
-} 
+}

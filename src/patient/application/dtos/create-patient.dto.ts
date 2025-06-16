@@ -1,4 +1,10 @@
-import { IsString, IsEmail, IsDateString, MinLength, Matches } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsDateString,
+  MinLength,
+  Matches,
+} from 'class-validator';
 
 export class CreatePatientDTO {
   @IsString()
@@ -16,4 +22,4 @@ export class CreatePatientDTO {
 
   @IsDateString()
   birthDate: Date;
-} 
+}

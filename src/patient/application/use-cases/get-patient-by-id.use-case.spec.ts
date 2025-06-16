@@ -29,7 +29,9 @@ describe('GetPatientByIdUseCase', () => {
   });
 
   it('should throw PatientNotFoundError when patient does not exist', async () => {
-    await expect(useCase.execute('non-existent-id')).rejects.toThrow(PatientNotFoundError);
+    await expect(useCase.execute('non-existent-id')).rejects.toThrow(
+      PatientNotFoundError,
+    );
   });
 
   it('should return patient by id', async () => {
@@ -55,4 +57,4 @@ describe('GetPatientByIdUseCase', () => {
     expect(foundPatient.getPhone()).toBe('1234567890');
     expect(foundPatient.getBirthDate()).toEqual(new Date('1990-01-01'));
   });
-}); 
+});

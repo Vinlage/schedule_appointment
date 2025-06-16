@@ -13,4 +13,4 @@ export class ListAppointmentsUseCase {
   async execute(): Promise<Appointment[]> {
     return this.appointmentRepository.findAll();
   }
-} 
+}

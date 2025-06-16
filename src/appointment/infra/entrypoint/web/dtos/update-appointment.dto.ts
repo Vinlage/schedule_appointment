@@ -14,4 +14,4 @@ export class UpdateAppointmentDto {
   @IsString()
   @IsOptional()
   notes?: string;
-} 
+}

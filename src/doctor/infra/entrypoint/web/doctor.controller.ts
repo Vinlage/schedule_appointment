@@ -53,4 +53,4 @@ export class DoctorController {
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.deleteDoctorUseCase.execute(id);
   }
-} 
+}

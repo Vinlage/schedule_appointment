@@ -13,4 +13,4 @@ export class ListDoctorsUseCase {
   async execute(): Promise<Doctor[]> {
     return this.doctorRepository.findAll();
   }
-} 
+}

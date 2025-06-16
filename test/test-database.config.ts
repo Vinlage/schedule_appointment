@@ -11,4 +11,4 @@ export const testDatabaseConfig: TypeOrmModuleOptions = {
   entities: [PatientTypeOrmEntity],
   synchronize: true,
   dropSchema: true, // Isso garante que o banco de dados seja limpo antes de cada teste
-}; 
+};

@@ -163,11 +163,7 @@ export class Appointment {
     );
   }
 
-  update(
-    date?: Date,
-    reason?: string,
-    notes?: string | null,
-  ): Appointment {
+  update(date?: Date, reason?: string, notes?: string | null): Appointment {
     if (this.status !== AppointmentStatus.SCHEDULED) {
       throw new Error('Only scheduled appointments can be updated');
     }
@@ -208,4 +204,4 @@ export class Appointment {
   isInTheFuture(): boolean {
     return this.date > new Date();
   }
-} 
+}

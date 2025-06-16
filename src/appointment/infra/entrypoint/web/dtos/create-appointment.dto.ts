@@ -1,4 +1,10 @@
-import { IsDate, IsNotEmpty, IsString, IsUUID, IsOptional } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+  IsOptional,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateAppointmentDto {
@@ -22,4 +28,4 @@ export class CreateAppointmentDto {
   @IsString()
   @IsOptional()
   notes?: string;
-} 
+}

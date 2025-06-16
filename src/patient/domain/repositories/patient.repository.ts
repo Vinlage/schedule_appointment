@@ -7,4 +7,4 @@ export interface PatientRepository {
   update(patient: Patient): Promise<void>;
   delete(id: string): Promise<void>;
   list(): Promise<Patient[]>;
-} 
+}

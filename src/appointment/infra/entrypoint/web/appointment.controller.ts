@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { CreateAppointmentUseCase } from '../../../application/use-cases/create-appointment.use-case';
@@ -67,4 +66,4 @@ export class AppointmentController {
   complete(@Param('id', ParseUUIDPipe) id: string) {
     return this.completeAppointmentUseCase.execute(id);
   }
-} 
+}

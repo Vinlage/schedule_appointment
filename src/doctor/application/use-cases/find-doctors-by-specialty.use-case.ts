@@ -9,4 +9,4 @@ export class FindDoctorsBySpecialtyUseCase {
   async execute(specialty: string): Promise<Doctor[]> {
     return this.doctorRepository.findBySpecialty(specialty);
   }
-} 
+}

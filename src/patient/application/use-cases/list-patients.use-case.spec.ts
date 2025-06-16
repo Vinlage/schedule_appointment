@@ -63,4 +63,4 @@ describe('ListPatientsUseCase', () => {
     expect(patients[0].getName()).toBe('John Doe');
     expect(patients[1].getName()).toBe('Jane Doe');
   });
-}); 
+});

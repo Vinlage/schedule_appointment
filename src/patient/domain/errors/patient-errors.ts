@@ -16,4 +16,4 @@ export class InvalidPatientDataError extends DomainError {
   constructor(message: string) {
     super(`Invalid patient data: ${message}`);
   }
-} 
+}

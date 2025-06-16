@@ -5,4 +5,4 @@ export interface DoctorProps {
   specialty: string;
   crm: string;
   active: boolean;
-} 
+}

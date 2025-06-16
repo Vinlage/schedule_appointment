@@ -14,7 +14,9 @@ export class CreatePatientUseCase {
 
   async execute(data: CreatePatientDTO): Promise<Patient> {
     // Verificar se já existe um paciente com o mesmo email
-    const existingPatient = await this.patientRepository.findByEmail(data.email);
+    const existingPatient = await this.patientRepository.findByEmail(
+      data.email,
+    );
     if (existingPatient) {
       throw new EmailAlreadyInUseError(data.email);
     }
@@ -32,4 +34,4 @@ export class CreatePatientUseCase {
 
     return patient;
   }
-} 
+}

@@ -1,4 +1,9 @@
-import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Appointment } from '../../domain/entities/appointment.entity';
 import { AppointmentRepository } from '../../domain/repositories/appointment.repository';
 import { APPOINTMENT_REPOSITORY } from '../../domain/repositories/tokens';
@@ -31,4 +36,4 @@ export class CancelAppointmentUseCase {
     const cancelledAppointment = appointment.cancel();
     return this.appointmentRepository.update(cancelledAppointment);
   }
-} 
+}

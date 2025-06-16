@@ -1,4 +1,9 @@
-import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Appointment } from '../../domain/entities/appointment.entity';
 import { AppointmentRepository } from '../../domain/repositories/appointment.repository';
 import { APPOINTMENT_REPOSITORY } from '../../domain/repositories/tokens';
@@ -11,14 +16,19 @@ export class UpdateAppointmentUseCase {
     private readonly appointmentRepository: AppointmentRepository,
   ) {}
 
-  async execute(id: string, updateAppointmentDto: UpdateAppointmentDto): Promise<Appointment> {
+  async execute(
+    id: string,
+    updateAppointmentDto: UpdateAppointmentDto,
+  ): Promise<Appointment> {
     const appointment = await this.appointmentRepository.findById(id);
     if (!appointment) {
       throw new NotFoundException(`Appointment with ID ${id} not found`);
     }
 
     if (!appointment.isScheduled()) {
-      throw new BadRequestException('Only scheduled appointments can be updated');
+      throw new BadRequestException(
+        'Only scheduled appointments can be updated',
+      );
     }
 
     if (appointment.isInThePast()) {
@@ -33,4 +43,4 @@ export class UpdateAppointmentUseCase {
 
     return this.appointmentRepository.update(updatedAppointment);
   }
-} 
+}

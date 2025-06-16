@@ -17,4 +17,4 @@ export class DeleteDoctorUseCase {
 
     await this.doctorRepository.delete(id);
   }
-} 
+}

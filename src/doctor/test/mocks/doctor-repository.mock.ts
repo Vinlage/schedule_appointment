@@ -4,43 +4,46 @@ import { DoctorRepository } from '../../domain/repositories/doctor.repository';
 export class DoctorRepositoryMock implements DoctorRepository {
   private doctors: Doctor[] = [];
 
-  async create(doctor: Doctor): Promise<Doctor> {
+  create(doctor: Doctor): Promise<Doctor> {
     this.doctors.push(doctor);
-    return doctor;
+    return Promise.resolve(doctor);
   }
 
-  async findById(id: string): Promise<Doctor | null> {
+  findById(id: string): Promise<Doctor | null> {
     const doctor = this.doctors.find((d) => d.getId() === id);
-    return doctor || null;
+    return Promise.resolve(doctor || null);
   }
 
-  async findByEmail(email: string): Promise<Doctor | null> {
+  findByEmail(email: string): Promise<Doctor | null> {
     const doctor = this.doctors.find((d) => d.getEmail() === email);
-    return doctor || null;
+    return Promise.resolve(doctor || null);
   }
 
-  async findBySpecialty(specialty: string): Promise<Doctor[]> {
-    return this.doctors.filter((d) => d.getSpecialty() === specialty);
+  findBySpecialty(specialty: string): Promise<Doctor[]> {
+    return Promise.resolve(
+      this.doctors.filter((d) => d.getSpecialty() === specialty),
+    );
   }
 
-  async update(doctor: Doctor): Promise<Doctor> {
+  update(doctor: Doctor): Promise<Doctor> {
     const index = this.doctors.findIndex((d) => d.getId() === doctor.getId());
     if (index === -1) {
-      throw new Error('Doctor not found');
+      return Promise.reject(new Error('Doctor not found'));
     }
     this.doctors[index] = doctor;
-    return doctor;
+    return Promise.resolve(doctor);
   }
 
-  async delete(id: string): Promise<void> {
+  delete(id: string): Promise<void> {
     const index = this.doctors.findIndex((d) => d.getId() === id);
     if (index === -1) {
-      throw new Error('Doctor not found');
+      return Promise.reject(new Error('Doctor not found'));
     }
     this.doctors.splice(index, 1);
+    return Promise.resolve();
   }
 
-  async findAll(): Promise<Doctor[]> {
-    return [...this.doctors];
+  findAll(): Promise<Doctor[]> {
+    return Promise.resolve([...this.doctors]);
   }
-} 
+}

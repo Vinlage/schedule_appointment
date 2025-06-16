@@ -23,4 +23,4 @@ export class CreateDoctorUseCase {
 
     return this.doctorRepository.create(doctor);
   }
-} 
+}

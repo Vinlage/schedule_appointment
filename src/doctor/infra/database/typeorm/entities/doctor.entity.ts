@@ -28,4 +28,4 @@ export class DoctorTypeOrmEntity {
 
   @Column({ name: 'updated_at' })
   updatedAt: Date;
-} 
+}
