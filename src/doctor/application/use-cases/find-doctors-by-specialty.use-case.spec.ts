@@ -1,4 +1,3 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { FindDoctorsBySpecialtyUseCase } from './find-doctors-by-specialty.use-case';
 import { DoctorRepositoryMock } from '../../test/mocks/doctor-repository.mock';
 import { Doctor } from '../../domain/entities/doctor.entity';
@@ -7,21 +6,9 @@ describe('FindDoctorsBySpecialtyUseCase', () => {
   let useCase: FindDoctorsBySpecialtyUseCase;
   let repository: DoctorRepositoryMock;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        FindDoctorsBySpecialtyUseCase,
-        {
-          provide: 'DOCTOR_REPOSITORY',
-          useClass: DoctorRepositoryMock,
-        },
-      ],
-    }).compile();
-
-    useCase = module.get<FindDoctorsBySpecialtyUseCase>(
-      FindDoctorsBySpecialtyUseCase,
-    );
-    repository = module.get<DoctorRepositoryMock>('DOCTOR_REPOSITORY');
+  beforeEach(() => {
+    repository = new DoctorRepositoryMock();
+    useCase = new FindDoctorsBySpecialtyUseCase(repository);
   });
 
   it('should be defined', () => {
@@ -29,45 +16,39 @@ describe('FindDoctorsBySpecialtyUseCase', () => {
   });
 
   it('should return doctors by specialty', async () => {
-    const cardiologist1 = Doctor.create(
-      'Dr. John Doe',
-      'john.doe@example.com',
-      '1234567890',
+    const doctor1 = Doctor.create(
+      'Dr. A',
+      'a@a.com',
+      '123',
       'Cardiology',
-      '12345',
+      '123',
     );
-
-    const cardiologist2 = Doctor.create(
-      'Dr. Jane Smith',
-      'jane.smith@example.com',
-      '0987654321',
+    const doctor2 = Doctor.create(
+      'Dr. B',
+      'b@b.com',
+      '456',
       'Cardiology',
-      '54321',
+      '456',
     );
-
-    const neurologist = Doctor.create(
-      'Dr. Bob Wilson',
-      'bob.wilson@example.com',
-      '5555555555',
+    const doctor3 = Doctor.create(
+      'Dr. C',
+      'c@c.com',
+      '789',
       'Neurology',
-      '67890',
+      '789',
     );
+    await repository.create(doctor1);
+    await repository.create(doctor2);
+    await repository.create(doctor3);
 
-    await repository.create(cardiologist1);
-    await repository.create(cardiologist2);
-    await repository.create(neurologist);
-
-    const cardiologists = await useCase.execute('Cardiology');
-
-    expect(cardiologists).toHaveLength(2);
-    expect(cardiologists[0]).toBeInstanceOf(Doctor);
-    expect(cardiologists[1]).toBeInstanceOf(Doctor);
-    expect(cardiologists[0].getSpecialty()).toBe('Cardiology');
-    expect(cardiologists[1].getSpecialty()).toBe('Cardiology');
+    const result = await useCase.execute('Cardiology');
+    expect(result.length).toBe(2);
+    expect(result[0].getSpecialty()).toBe('Cardiology');
+    expect(result[1].getSpecialty()).toBe('Cardiology');
   });
 
   it('should return empty array when no doctors found for specialty', async () => {
-    const doctors = await useCase.execute('NonExistentSpecialty');
-    expect(doctors).toEqual([]);
+    const result = await useCase.execute('NonExistentSpecialty');
+    expect(result).toEqual([]);
   });
 });

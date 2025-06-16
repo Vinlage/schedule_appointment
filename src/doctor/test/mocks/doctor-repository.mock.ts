@@ -1,10 +1,15 @@
 import { Doctor } from '../../domain/entities/doctor.entity';
 import { DoctorRepository } from '../../domain/repositories/doctor.repository';
+import { ConflictException } from '@nestjs/common';
 
 export class DoctorRepositoryMock implements DoctorRepository {
   private doctors: Doctor[] = [];
 
   create(doctor: Doctor): Promise<Doctor> {
+    const exists = this.doctors.some((d) => d.getEmail() === doctor.getEmail());
+    if (exists) {
+      return Promise.reject(new ConflictException('Email already in use'));
+    }
     this.doctors.push(doctor);
     return Promise.resolve(doctor);
   }
