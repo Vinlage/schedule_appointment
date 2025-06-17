@@ -8,5 +8,6 @@ export const databaseConfig: TypeOrmModuleOptions = {
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_DATABASE || 'schedule_appointment',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  synchronize: process.env.NODE_ENV !== 'production',
+  synchronize: true,
+  logging: false,
 };

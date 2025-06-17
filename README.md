@@ -97,3 +97,167 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+# Schedule Appointment API
+
+API para agendamento de consultas médicas desenvolvida com NestJS e TypeORM.
+
+## 🚀 Tecnologias
+
+- **NestJS** - Framework Node.js
+- **TypeORM** - ORM para banco de dados
+- **PostgreSQL** - Banco de dados
+- **Docker** - Containerização
+- **Jest** - Testes
+
+## 📋 Pré-requisitos
+
+- Node.js (versão 18 ou superior)
+- Docker e Docker Compose
+- npm ou yarn
+
+## 🛠️ Instalação
+
+1. Clone o repositório:
+```bash
+git clone <url-do-repositorio>
+cd schedule_appointment
+```
+
+2. Instale as dependências:
+```bash
+npm install
+```
+
+3. Configure as variáveis de ambiente:
+```bash
+cp .env.example .env
+```
+
+4. Inicie o banco de dados:
+```bash
+npm run db:start
+```
+
+5. Execute as migrações (se necessário):
+```bash
+npm run start:dev
+```
+
+## 🐳 Docker
+
+### Comandos úteis:
+
+- **Iniciar todos os serviços:**
+```bash
+npm run docker:up
+```
+
+- **Parar todos os serviços:**
+```bash
+npm run docker:down
+```
+
+- **Reiniciar serviços:**
+```bash
+npm run docker:restart
+```
+
+- **Ver logs:**
+```bash
+npm run docker:logs
+```
+
+- **Limpar containers e volumes:**
+```bash
+npm run docker:clean
+```
+
+### Apenas banco de dados:
+
+- **Iniciar apenas PostgreSQL:**
+```bash
+npm run db:start
+```
+
+- **Parar PostgreSQL:**
+```bash
+npm run db:stop
+```
+
+- **Ver logs do PostgreSQL:**
+```bash
+npm run db:logs
+```
+
+## 🗄️ Banco de Dados
+
+### Configuração:
+- **Host:** localhost
+- **Porta:** 5432
+- **Usuário:** postgres
+- **Senha:** postgres
+- **Database:** schedule_appointment
+
+### PgAdmin:
+- **URL:** http://localhost:8080
+- **Email:** admin@admin.com
+- **Senha:** admin
+
+## 🚀 Executando a aplicação
+
+### Desenvolvimento:
+```bash
+npm run start:dev
+```
+
+### Produção:
+```bash
+npm run build
+npm run start:prod
+```
+
+## 🧪 Testes
+
+```bash
+# Executar testes
+npm run test
+
+# Executar testes em modo watch
+npm run test:watch
+
+# Executar testes com cobertura
+npm run test:cov
+
+# Executar testes e2e
+npm run test:e2e
+```
+
+## 📁 Estrutura do Projeto
+
+```
+src/
+├── appointment/          # Módulo de consultas
+│   ├── application/      # Casos de uso
+│   ├── domain/          # Entidades e regras de negócio
+│   └── infra/           # Implementações (repositórios, controllers)
+├── doctor/              # Módulo de médicos
+├── patient/             # Módulo de pacientes
+└── shared/              # Código compartilhado
+```
+
+## 🔧 Scripts Disponíveis
+
+- `npm run build` - Compilar o projeto
+- `npm run start:dev` - Executar em modo desenvolvimento
+- `npm run start:prod` - Executar em modo produção
+- `npm run test` - Executar testes
+- `npm run lint` - Executar linter
+- `npm run format` - Formatar código
+- `npm run docker:up` - Iniciar containers Docker
+- `npm run docker:down` - Parar containers Docker
+- `npm run db:start` - Iniciar apenas o banco de dados
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT.
