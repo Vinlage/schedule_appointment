@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
+import { Repository, Between, DataSource } from 'typeorm';
 import { Appointment } from '../../../../domain/entities/appointment.entity';
 import { AppointmentRepository } from '../../../../domain/repositories/appointment.repository';
 import { AppointmentTypeOrmEntity } from '../entities/appointment.entity';
@@ -12,29 +12,43 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
   constructor(
     @InjectRepository(AppointmentTypeOrmEntity)
     private readonly repository: Repository<AppointmentTypeOrmEntity>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(appointment: Appointment): Promise<Appointment> {
-    const appointmentEntity = this.repository.create({
-      id: appointment.getId(),
-      doctor: { id: appointment.getDoctor().getId() },
-      patient: { id: appointment.getPatient().getId() },
-      appointmentDate: appointment.getDate(),
-      status: appointment.getStatus(),
-      reason: appointment.getReason(),
-      notes: appointment.getNotes() ?? undefined,
-      createdAt: appointment.getCreatedAt(),
-      updatedAt: appointment.getUpdatedAt(),
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    await this.repository.save(appointmentEntity);
-    return appointment;
+    try {
+      const appointmentEntity = this.repository.create({
+        id: appointment.getId(),
+        doctor: { id: appointment.getDoctor().getId() },
+        patient: { id: appointment.getPatient().getId() },
+        appointmentDate: appointment.getDate(),
+        status: appointment.getStatus(),
+        reason: appointment.getReason(),
+        notes: appointment.getNotes() ?? undefined,
+        createdAt: appointment.getCreatedAt(),
+        updatedAt: appointment.getUpdatedAt(),
+      });
+
+      await queryRunner.manager.save(appointmentEntity);
+      await queryRunner.commitTransaction();
+      return appointment;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async findById(id: string): Promise<Appointment | null> {
     const appointmentEntity = await this.repository.findOne({
       where: { id },
       relations: ['doctor', 'patient'],
+      lock: { mode: 'pessimistic_write' },
     });
 
     if (!appointmentEntity) return null;
@@ -135,18 +149,45 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
   }
 
   async update(appointment: Appointment): Promise<Appointment> {
-    await this.repository.update(appointment.getId(), {
-      appointmentDate: appointment.getDate(),
-      status: appointment.getStatus(),
-      reason: appointment.getReason(),
-      notes: appointment.getNotes() ?? undefined,
-      updatedAt: appointment.getUpdatedAt(),
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    return appointment;
+    try {
+      await queryRunner.manager.update(
+        AppointmentTypeOrmEntity,
+        appointment.getId(),
+        {
+          appointmentDate: appointment.getDate(),
+          status: appointment.getStatus(),
+          reason: appointment.getReason(),
+          notes: appointment.getNotes() ?? undefined,
+          updatedAt: appointment.getUpdatedAt(),
+        },
+      );
+      await queryRunner.commitTransaction();
+      return appointment;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.delete(AppointmentTypeOrmEntity, id);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
