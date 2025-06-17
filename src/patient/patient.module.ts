@@ -24,5 +24,6 @@ import { PATIENT_REPOSITORY } from './domain/repositories/tokens';
       useClass: TypeOrmPatientRepository,
     },
   ],
+  exports: [PATIENT_REPOSITORY],
 })
 export class PatientModule {}

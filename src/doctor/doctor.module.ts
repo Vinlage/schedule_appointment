@@ -24,5 +24,6 @@ import { DOCTOR_REPOSITORY } from './domain/repositories/tokens';
       useClass: TypeOrmDoctorRepository,
     },
   ],
+  exports: [DOCTOR_REPOSITORY],
 })
 export class DoctorModule {}
