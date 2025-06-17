@@ -11,14 +11,12 @@ import { CompleteAppointmentUseCase } from './application/use-cases/complete-app
 import { TypeOrmAppointmentRepository } from './infra/database/typeorm/repositories/appointment.repository';
 import { AppointmentTypeOrmEntity } from './infra/database/typeorm/entities/appointment.entity';
 import { APPOINTMENT_REPOSITORY } from './domain/repositories/tokens';
-import { DoctorModule } from '../doctor/doctor.module';
-import { PatientModule } from '../patient/patient.module';
+import { CommunicationModule } from '../shared/infra/communication/communication.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AppointmentTypeOrmEntity]),
-    DoctorModule,
-    PatientModule,
+    CommunicationModule,
   ],
   controllers: [AppointmentController],
   providers: [

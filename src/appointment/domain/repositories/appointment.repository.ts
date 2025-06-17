@@ -1,21 +1,20 @@
 import { Appointment } from '../entities/appointment.entity';
-import { Doctor } from '../../../doctor/domain/entities/doctor.entity';
-import { Patient } from '../../../patient/domain/entities/patient.entity';
+import { AppointmentId } from '../value-objects/appointment-id.value-object';
 
 export interface AppointmentRepository {
   create(appointment: Appointment): Promise<Appointment>;
-  findById(id: string): Promise<Appointment | null>;
+  findById(id: AppointmentId): Promise<Appointment | null>;
   findAll(): Promise<Appointment[]>;
-  findByDoctor(
-    doctor: Doctor,
+  findByDoctorId(
+    doctorId: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<Appointment[]>;
-  findByPatient(
-    patient: Patient,
+  findByPatientId(
+    patientId: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<Appointment[]>;
   update(appointment: Appointment): Promise<Appointment>;
-  delete(id: string): Promise<void>;
+  delete(id: AppointmentId): Promise<void>;
 }

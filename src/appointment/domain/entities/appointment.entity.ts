@@ -1,6 +1,6 @@
-import { randomUUID } from 'crypto';
-import { Doctor } from '../../../doctor/domain/entities/doctor.entity';
-import { Patient } from '../../../patient/domain/entities/patient.entity';
+import { AppointmentId } from '../value-objects/appointment-id.value-object';
+import { DoctorInfoDto } from '../dtos/doctor-info.dto';
+import { PatientInfoDto } from '../dtos/patient-info.dto';
 
 export enum AppointmentStatus {
   SCHEDULED = 'SCHEDULED',
@@ -11,9 +11,9 @@ export enum AppointmentStatus {
 
 export class Appointment {
   private constructor(
-    private readonly id: string,
-    private readonly doctor: Doctor,
-    private readonly patient: Patient,
+    private readonly id: AppointmentId,
+    private readonly doctorInfo: DoctorInfoDto,
+    private readonly patientInfo: PatientInfoDto,
     private readonly date: Date,
     private readonly status: AppointmentStatus,
     private readonly reason: string,
@@ -23,17 +23,17 @@ export class Appointment {
   ) {}
 
   static create(
-    doctor: Doctor,
-    patient: Patient,
+    doctorInfo: DoctorInfoDto,
+    patientInfo: PatientInfoDto,
     date: Date,
     reason: string,
     notes?: string,
   ): Appointment {
     const now = new Date();
     return new Appointment(
-      randomUUID(),
-      doctor,
-      patient,
+      AppointmentId.create(),
+      doctorInfo,
+      patientInfo,
       date,
       AppointmentStatus.SCHEDULED,
       reason,
@@ -44,9 +44,9 @@ export class Appointment {
   }
 
   static reconstruct(
-    id: string,
-    doctor: Doctor,
-    patient: Patient,
+    id: AppointmentId,
+    doctorInfo: DoctorInfoDto,
+    patientInfo: PatientInfoDto,
     date: Date,
     status: AppointmentStatus,
     reason: string,
@@ -56,8 +56,8 @@ export class Appointment {
   ): Appointment {
     return new Appointment(
       id,
-      doctor,
-      patient,
+      doctorInfo,
+      patientInfo,
       date,
       status,
       reason,
@@ -68,16 +68,16 @@ export class Appointment {
   }
 
   // Getters
-  getId(): string {
+  getId(): AppointmentId {
     return this.id;
   }
 
-  getDoctor(): Doctor {
-    return this.doctor;
+  getDoctorInfo(): DoctorInfoDto {
+    return this.doctorInfo;
   }
 
-  getPatient(): Patient {
-    return this.patient;
+  getPatientInfo(): PatientInfoDto {
+    return this.patientInfo;
   }
 
   getDate(): Date {
@@ -112,8 +112,8 @@ export class Appointment {
 
     return Appointment.reconstruct(
       this.id,
-      this.doctor,
-      this.patient,
+      this.doctorInfo,
+      this.patientInfo,
       this.date,
       AppointmentStatus.CONFIRMED,
       this.reason,
@@ -134,8 +134,8 @@ export class Appointment {
 
     return Appointment.reconstruct(
       this.id,
-      this.doctor,
-      this.patient,
+      this.doctorInfo,
+      this.patientInfo,
       this.date,
       AppointmentStatus.CANCELLED,
       this.reason,
@@ -152,8 +152,8 @@ export class Appointment {
 
     return Appointment.reconstruct(
       this.id,
-      this.doctor,
-      this.patient,
+      this.doctorInfo,
+      this.patientInfo,
       this.date,
       AppointmentStatus.COMPLETED,
       this.reason,
@@ -170,8 +170,8 @@ export class Appointment {
 
     return Appointment.reconstruct(
       this.id,
-      this.doctor,
-      this.patient,
+      this.doctorInfo,
+      this.patientInfo,
       date ?? this.date,
       this.status,
       reason ?? this.reason,

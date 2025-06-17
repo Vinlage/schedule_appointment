@@ -8,6 +8,7 @@ import { Appointment } from '../../domain/entities/appointment.entity';
 import { AppointmentRepository } from '../../domain/repositories/appointment.repository';
 import { APPOINTMENT_REPOSITORY } from '../../domain/repositories/tokens';
 import { UpdateAppointmentDto } from '../../infra/entrypoint/web/dtos/update-appointment.dto';
+import { AppointmentId } from '../../domain/value-objects/appointment-id.value-object';
 
 @Injectable()
 export class UpdateAppointmentUseCase {
@@ -20,7 +21,9 @@ export class UpdateAppointmentUseCase {
     id: string,
     updateAppointmentDto: UpdateAppointmentDto,
   ): Promise<Appointment> {
-    const appointment = await this.appointmentRepository.findById(id);
+    const appointmentId = AppointmentId.fromString(id);
+    const appointment =
+      await this.appointmentRepository.findById(appointmentId);
     if (!appointment) {
       throw new NotFoundException(`Appointment with ID ${id} not found`);
     }

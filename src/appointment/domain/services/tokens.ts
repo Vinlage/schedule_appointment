@@ -1,0 +1,2 @@
+export const DOCTOR_SERVICE = 'DOCTOR_SERVICE';
+export const PATIENT_SERVICE = 'PATIENT_SERVICE';

@@ -8,52 +8,53 @@ import { Appointment } from '../../domain/entities/appointment.entity';
 import { AppointmentRepository } from '../../domain/repositories/appointment.repository';
 import { APPOINTMENT_REPOSITORY } from '../../domain/repositories/tokens';
 import { CreateAppointmentDto } from '../../infra/entrypoint/web/dtos/create-appointment.dto';
-import { DoctorRepository } from '../../../doctor/domain/repositories/doctor.repository';
-import { PatientRepository } from '../../../patient/domain/repositories/patient.repository';
-import { DOCTOR_REPOSITORY } from '../../../doctor/domain/repositories/tokens';
-import { PATIENT_REPOSITORY } from '../../../patient/domain/repositories/tokens';
+import { DoctorServiceInterface } from '../../domain/services/doctor-service.interface';
+import { PatientServiceInterface } from '../../domain/services/patient-service.interface';
+import { DOCTOR_SERVICE } from '../../domain/services/tokens';
+import { PATIENT_SERVICE } from '../../domain/services/tokens';
 
 @Injectable()
 export class CreateAppointmentUseCase {
   constructor(
     @Inject(APPOINTMENT_REPOSITORY)
     private readonly appointmentRepository: AppointmentRepository,
-    @Inject(DOCTOR_REPOSITORY)
-    private readonly doctorRepository: DoctorRepository,
-    @Inject(PATIENT_REPOSITORY)
-    private readonly patientRepository: PatientRepository,
+    @Inject(DOCTOR_SERVICE)
+    private readonly doctorService: DoctorServiceInterface,
+    @Inject(PATIENT_SERVICE)
+    private readonly patientService: PatientServiceInterface,
   ) {}
 
   async execute(
     createAppointmentDto: CreateAppointmentDto,
   ): Promise<Appointment> {
-    const doctor = await this.doctorRepository.findById(
+    const doctorInfo = await this.doctorService.findById(
       createAppointmentDto.doctorId,
     );
-    if (!doctor) {
+    if (!doctorInfo) {
       throw new NotFoundException(
         `Doctor with ID ${createAppointmentDto.doctorId} not found`,
       );
     }
 
-    if (!doctor.isActive()) {
+    if (!doctorInfo.active) {
       throw new BadRequestException(
         'Cannot schedule appointment with inactive doctor',
       );
     }
 
-    const patient = await this.patientRepository.findById(
+    const patientInfo = await this.patientService.findById(
       createAppointmentDto.patientId,
     );
-    if (!patient) {
+    if (!patientInfo) {
       throw new NotFoundException(
         `Patient with ID ${createAppointmentDto.patientId} not found`,
       );
     }
 
     // Check if doctor is available at the requested time
-    const doctorAppointments =
-      await this.appointmentRepository.findByDoctor(doctor);
+    const doctorAppointments = await this.appointmentRepository.findByDoctorId(
+      createAppointmentDto.doctorId,
+    );
     const hasConflict = doctorAppointments.some(
       (appointment) =>
         appointment.getDate().getTime() ===
@@ -68,7 +69,9 @@ export class CreateAppointmentUseCase {
 
     // Check if patient already has an appointment at the requested time
     const patientAppointments =
-      await this.appointmentRepository.findByPatient(patient);
+      await this.appointmentRepository.findByPatientId(
+        createAppointmentDto.patientId,
+      );
     const hasPatientConflict = patientAppointments.some(
       (appointment) =>
         appointment.getDate().getTime() ===
@@ -82,8 +85,8 @@ export class CreateAppointmentUseCase {
     }
 
     const appointment = Appointment.create(
-      doctor,
-      patient,
+      doctorInfo,
+      patientInfo,
       createAppointmentDto.date,
       createAppointmentDto.reason,
       createAppointmentDto.notes,

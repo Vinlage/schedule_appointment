@@ -4,8 +4,9 @@ import { Repository, Between, DataSource } from 'typeorm';
 import { Appointment } from '../../../../domain/entities/appointment.entity';
 import { AppointmentRepository } from '../../../../domain/repositories/appointment.repository';
 import { AppointmentTypeOrmEntity } from '../entities/appointment.entity';
-import { Doctor } from '../../../../../doctor/domain/entities/doctor.entity';
-import { Patient } from '../../../../../patient/domain/entities/patient.entity';
+import { AppointmentId } from '../../../../domain/value-objects/appointment-id.value-object';
+import { DoctorInfoDto } from '../../../../domain/dtos/doctor-info.dto';
+import { PatientInfoDto } from '../../../../domain/dtos/patient-info.dto';
 
 @Injectable()
 export class TypeOrmAppointmentRepository implements AppointmentRepository {
@@ -22,9 +23,9 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
 
     try {
       const appointmentEntity = this.repository.create({
-        id: appointment.getId(),
-        doctor: { id: appointment.getDoctor().getId() },
-        patient: { id: appointment.getPatient().getId() },
+        id: appointment.getId().getValue(),
+        doctor: { id: appointment.getDoctorInfo().id },
+        patient: { id: appointment.getPatientInfo().id },
         appointmentDate: appointment.getDate(),
         status: appointment.getStatus(),
         reason: appointment.getReason(),
@@ -44,19 +45,34 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
     }
   }
 
-  async findById(id: string): Promise<Appointment | null> {
+  async findById(id: AppointmentId): Promise<Appointment | null> {
     const appointmentEntity = await this.repository.findOne({
-      where: { id },
+      where: { id: id.getValue() },
       relations: ['doctor', 'patient'],
       lock: { mode: 'pessimistic_write' },
     });
 
     if (!appointmentEntity) return null;
 
+    const doctorInfo = DoctorInfoDto.create(
+      appointmentEntity.doctor.id,
+      appointmentEntity.doctor.name,
+      appointmentEntity.doctor.email,
+      appointmentEntity.doctor.specialty,
+      appointmentEntity.doctor.active,
+    );
+
+    const patientInfo = PatientInfoDto.create(
+      appointmentEntity.patient.id,
+      appointmentEntity.patient.name,
+      appointmentEntity.patient.email,
+      appointmentEntity.patient.birthDate,
+    );
+
     return Appointment.reconstruct(
-      appointmentEntity.id,
-      appointmentEntity.doctor as unknown as Doctor,
-      appointmentEntity.patient as unknown as Patient,
+      AppointmentId.fromString(appointmentEntity.id),
+      doctorInfo,
+      patientInfo,
       appointmentEntity.appointmentDate,
       appointmentEntity.status,
       appointmentEntity.reason,
@@ -71,27 +87,42 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
       relations: ['doctor', 'patient'],
     });
 
-    return appointmentEntities.map((entity) =>
-      Appointment.reconstruct(
-        entity.id,
-        entity.doctor as unknown as Doctor,
-        entity.patient as unknown as Patient,
+    return appointmentEntities.map((entity) => {
+      const doctorInfo = DoctorInfoDto.create(
+        entity.doctor.id,
+        entity.doctor.name,
+        entity.doctor.email,
+        entity.doctor.specialty,
+        entity.doctor.active,
+      );
+
+      const patientInfo = PatientInfoDto.create(
+        entity.patient.id,
+        entity.patient.name,
+        entity.patient.email,
+        entity.patient.birthDate,
+      );
+
+      return Appointment.reconstruct(
+        AppointmentId.fromString(entity.id),
+        doctorInfo,
+        patientInfo,
         entity.appointmentDate,
         entity.status,
         entity.reason,
         entity.notes,
         entity.createdAt,
         entity.updatedAt,
-      ),
-    );
+      );
+    });
   }
 
-  async findByDoctor(
-    doctor: Doctor,
+  async findByDoctorId(
+    doctorId: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<Appointment[]> {
-    const where: Record<string, unknown> = { doctor: { id: doctor.getId() } };
+    const where: Record<string, unknown> = { doctor: { id: doctorId } };
 
     if (startDate && endDate) {
       where['appointmentDate'] = Between(startDate, endDate);
@@ -102,27 +133,42 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
       relations: ['doctor', 'patient'],
     });
 
-    return appointmentEntities.map((entity) =>
-      Appointment.reconstruct(
-        entity.id,
-        entity.doctor as unknown as Doctor,
-        entity.patient as unknown as Patient,
+    return appointmentEntities.map((entity) => {
+      const doctorInfo = DoctorInfoDto.create(
+        entity.doctor.id,
+        entity.doctor.name,
+        entity.doctor.email,
+        entity.doctor.specialty,
+        entity.doctor.active,
+      );
+
+      const patientInfo = PatientInfoDto.create(
+        entity.patient.id,
+        entity.patient.name,
+        entity.patient.email,
+        entity.patient.birthDate,
+      );
+
+      return Appointment.reconstruct(
+        AppointmentId.fromString(entity.id),
+        doctorInfo,
+        patientInfo,
         entity.appointmentDate,
         entity.status,
         entity.reason,
         entity.notes,
         entity.createdAt,
         entity.updatedAt,
-      ),
-    );
+      );
+    });
   }
 
-  async findByPatient(
-    patient: Patient,
+  async findByPatientId(
+    patientId: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<Appointment[]> {
-    const where: Record<string, unknown> = { patient: { id: patient.getId() } };
+    const where: Record<string, unknown> = { patient: { id: patientId } };
 
     if (startDate && endDate) {
       where['appointmentDate'] = Between(startDate, endDate);
@@ -133,19 +179,34 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
       relations: ['doctor', 'patient'],
     });
 
-    return appointmentEntities.map((entity) =>
-      Appointment.reconstruct(
-        entity.id,
-        entity.doctor as unknown as Doctor,
-        entity.patient as unknown as Patient,
+    return appointmentEntities.map((entity) => {
+      const doctorInfo = DoctorInfoDto.create(
+        entity.doctor.id,
+        entity.doctor.name,
+        entity.doctor.email,
+        entity.doctor.specialty,
+        entity.doctor.active,
+      );
+
+      const patientInfo = PatientInfoDto.create(
+        entity.patient.id,
+        entity.patient.name,
+        entity.patient.email,
+        entity.patient.birthDate,
+      );
+
+      return Appointment.reconstruct(
+        AppointmentId.fromString(entity.id),
+        doctorInfo,
+        patientInfo,
         entity.appointmentDate,
         entity.status,
         entity.reason,
         entity.notes,
         entity.createdAt,
         entity.updatedAt,
-      ),
-    );
+      );
+    });
   }
 
   async update(appointment: Appointment): Promise<Appointment> {
@@ -156,7 +217,7 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
     try {
       await queryRunner.manager.update(
         AppointmentTypeOrmEntity,
-        appointment.getId(),
+        appointment.getId().getValue(),
         {
           appointmentDate: appointment.getDate(),
           status: appointment.getStatus(),
@@ -175,13 +236,13 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
     }
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: AppointmentId): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.delete(AppointmentTypeOrmEntity, id);
+      await queryRunner.manager.delete(AppointmentTypeOrmEntity, id.getValue());
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
